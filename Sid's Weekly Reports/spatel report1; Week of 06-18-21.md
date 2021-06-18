@@ -37,14 +37,14 @@ Sid's copy of rubin_rhapsodies.ipynb (Riley's → My Edits) : Used Riley's visua
 ## 2. Figures (at least 1 figure)
 
 
-| Figure 1 : This is the 1000th object in the PLAsTiCC training data shown in all 6 passbands u,g,r,i,z,y. [[GitHub Link](https://github.com/fedhere/RubinRhapsodies/blob/main/Sid's_copy_of_rubin_rhapsodies.ipynb)] |
+| Figure 1 : This is the first object in the PLAsTiCC training data shown in all 6 passbands u,g,r,i,z,y. [[GitHub Link](https://github.com/fedhere/RubinRhapsodies/blob/main/Sid's_copy_of_rubin_rhapsodies.ipynb)] |
 | :----------------------------------------------------------: |
 | <img src="./figures/r1 f1.png" alt="Figure 1" style="zoom: 50%;" /> |
 
 
 
 
-| Figure 2 : This is the same 1000th object in the PLAsTiCC training data, as shown in Figure 1, but only with passband 'z'. This helped show the individual band, which was more insightful to see, than all 6 passbands at once, for me at this point. [[GitHub Link](https://github.com/fedhere/RubinRhapsodies/blob/main/Sid's_copy_of_rubin_rhapsodies.ipynb)] |
+| Figure 2 : This is the first object in the PLAsTiCC training data, as shown in Figure 1, but only with passband 'z'. This helped show the individual band, which was more insightful to see, than all 6 passbands at once, for me at this point. [[GitHub Link](https://github.com/fedhere/RubinRhapsodies/blob/main/Sid's_copy_of_rubin_rhapsodies.ipynb)] |
 | :----------------------------------------------------------: |
 | <img src="./figures/r1 f2.png" alt="Figure 2" style="zoom: 50%;" /> |
 
