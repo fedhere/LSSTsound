@@ -53,6 +53,6 @@ Overall a good week for figuring out the next steps of systematically sonifying 
 
 Making use of the sonify repository to sonify the PLAsTiCC data and produce sound clips.
 
-Read Chapters 3 and 4 of the Sonification thesis paper and summarize/take notes of important points
+Read Chapters 2 and 3 of the Sonification thesis paper and summarize/take notes of important points
 
 Sign up for the Rubin Presentation in early August
