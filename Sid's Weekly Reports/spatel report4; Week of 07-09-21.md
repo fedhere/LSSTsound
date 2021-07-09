@@ -28,11 +28,11 @@
 
 | ugrizy split |
 | :----------------------------------------------------------: |
-| <img src="./Sid's Weekly Reports/figures/ugrizy split plot.png" alt="Figure 1" style="zoom: 10%;" /> |
+| <img src="./figures/ugrizy split plot.png" alt="Figure 1" style="zoom: 10%;" /> |
 
 | ugrizy stacked|
 | :----------------------------------------------------------: |
-| <img src="./Sid's Weekly Reports/figures/ugrizy stacked plot.png" alt="Figure 1" style="zoom: 10%;" /> |
+| <img src="./figures/ugrizy stacked plot.png" alt="Figure 1" style="zoom: 10%;" /> |
 
 
 
