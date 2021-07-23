@@ -18,14 +18,16 @@ Second notebook (Presentation: July 22nd): [[GitHub Link](https://github.com/fed
 
 Here are some plots from the presentation this week, they are included in the notebooks above as well as their corresponding sonifications:
 
-|Figure 1 | Plot of an eclipsing binary (Object 7566)|
-| :------------------: |
-|<img src="./figures/july22EBs.png" alt = "Figure 1" style= "zoom:10%;"/>|
+
+|Figure 1 : Plot of an eclipsing binary (Object 7566)|
+| :----------------------------------------------------------: |
+| <img src="./figures/july22EBs.png" alt = "Figure 1" style= "zoom:10%;"/> |
 
 
-|Figure 2 | Plot of an eclipsing binary w/ passband distinction (Object 7566)|
-| :------------------: |
-|<img src="./figures/july22EBm.png" alt = "Figure 1" style= "zoom:10%;"/>|
+
+|Figure 2 : Plot of an eclipsing binary w/ passband distinction (Object 7566)|
+| :----------------------------------------------------------: |
+| <img src="./figures/july22EBm.png" alt = "Figure 1" style= "zoom:10%;"/> |
 
 ## 3. Results
 
