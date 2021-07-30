@@ -35,3 +35,5 @@ Main focus of this week was to figure out how to map flux error to volume. Mainl
 Write code to find the flux range for each band of objects: 615, 5515915, and 287556.
 
 Fix up plot and their colors with Seaborn.
+
+Make presentation slides for August 10th and prepare
