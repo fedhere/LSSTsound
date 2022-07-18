@@ -1,3 +1,7 @@
+.idea/*
+.idea
+*pycache*
+.venv/
 .venv
 *wav
 *png

@@ -1,0 +1,187 @@
+# defining the bandpasses for all functions
+import importlib
+import pandas as pd
+import numpy as np
+from sonifyFED import sonify as sonify
+from .rr_plotutils import *
+from . import configs as configs
+
+importlib.reload(configs)
+importlib.reload(sonify)
+
+def getrange(obj):
+    maxflux = obj.flux.max()
+    minflux = obj.flux.min()
+    return (minflux, maxflux)
+
+def transpose(notes, down=False, interval=5, intervals=1):
+    if isinstance(notes, list):
+        notes = np.array(notes)
+    assert isinstance(notes, np.ndarray), "must pass a list or a 1D array of notes"
+    assert len(notes.shape) == 1, "notes muse be a 1d list or array"
+    sign = -1 if down else 1
+    return notes + sign * interval * intervals #transpose by n intervals, each of n notes in the scale (default 5)
+
+def readdata(path=None):
+    if path is None:
+        from rrhapsodies.configs import DATA_PATH as path
+    data = pd.read_csv(path["data"])
+    metadata = pd.read_csv(path["metadata"])
+    return data, metadata
+
+def rescalenotes(fluxValue, minmaxflux, keynotes):
+    minflux, maxflux = minmaxflux
+    fullrange = maxflux - minflux
+    keynotesrange = len(keynotes)
+    startindx = int(np.round((fluxValue.min() - minflux) / (fullrange / keynotesrange)))
+    endindx = int(np.round((maxflux - fluxValue.max()) / (fullrange / keynotesrange)))
+    return startindx, -endindx
+
+def prep_sonification(x_points, y_points, key=configs.KEY, filter=None,
+                      noctaves=configs.NOCT, t_min=1, t_max=15,
+                      transposing=True, rescaling=None, plot=False):
+    if plot:
+        ax = plt.figure(figsize=(10, 3)).add_subplot()
+        plt.plot(x_points, y_points, '.')
+    if transposing:
+        if filter is None:
+            transposition = 0
+        else:
+            transposition = configs.TRANSPOSITIONS[filter]
+
+    # time axis manipulation
+    normalized_x = sonify.core.scale_list_to_range(x_points, new_min=t_min, new_max=t_max)
+
+    quantized_x = sonify.quantize_x_value(normalized_x, steps=0.5)
+    assert len(normalized_x) == len(x_points)
+    # flux axis normalization
+    data = list(zip(quantized_x, y_points))
+    normed_data = sonify.core.convert_to_key(data, key,  number_of_octaves=noctaves, minmaxvalue=rescaling)
+
+    _, normalized_y = zip(*normed_data)
+    assert len(normalized_y) == len(y_points)
+    if transposing:
+        normalized_y = transpose(np.array(normalized_y), intervals=transposition)
+
+    normed_data = list(zip(quantized_x, normalized_y))
+    if plot:
+        setax2ticks(ax)
+        plt.show()
+
+    return normed_data
+
+def gettrack(x, y, filter, key, minmaxflux, transposing=False,
+             rescaled=False, noctaves=configs.NOCT):
+    #rescale the notes range to enable proper normalization
+    rescaling = None
+    keynotes = sonify.core.key_name_to_notes(key, number_of_octaves=noctaves)
+    if rescaled:
+        rescaling = rescalenotes(y, minmaxflux, keynotes)
+
+    return prep_sonification(x, y, key=key, filter=filter,
+                                    transposing=transposing, rescaling=rescaling,
+                                    noctaves=noctaves, plot=False)
+
+
+def singleSonification(data, objectID, filter, instrument=None, key=None,
+                       noctaves=configs.NOCT,
+                       transposing=False, rescaled=False,
+                       save=False, plot=False, diagonsticplots=False):
+    if key is None:
+        key=configs.KEY
+    filters = configs.FILTERS
+    assert filter in filters, "ERROR: your filter argument must be 'u', 'g', 'r', 'i', 'z', or 'y'"
+    if instrument is None:
+        instrument = configs.INSTRUMENTS[filter]
+
+    objFiltered = data[data["object_id"]==objectID]
+    objP = objFiltered[objFiltered["passband"].isin([configs.passband[filter]])]
+
+    timeValue = objP["mjd"].values
+    fluxValue = objP["flux"].values
+    fluxErr = objP["flux_err"].values
+    normed_data = gettrack(timeValue, fluxValue, filter, key, getrange(objFiltered),
+                           noctaves=noctaves, transposing=transposing, rescaled=rescaled)
+    if plot:
+        print("now plotting")
+        singlePlotObject(data, objectID, filter,
+                         instrument=instrument, save=False, show=False)
+
+        plt.savefig('{}/ID{}_{}.png'.format(configs.OUTDIR, objectID, filter), dpi=300, bbox_inches='tight')
+        plt.show()
+    if diagonsticplots:
+        ax = plt.figure().add_subplot()
+        plt.plot(timeValue, list(zip(*normed_data))[0], '.')
+        plt.xlabel("MJD")
+        plt.ylabel("note time")
+        ax.plot([0, 1], [0, 1], transform=ax.transAxes)
+        plt.show()
+        ax = plt.figure().add_subplot()
+        plt.plot(fluxValue, list(zip(*normed_data))[1], '.')
+        plt.xlabel("flux")
+        plt.ylabel("note")
+        ax.plot([0, 1], [0, 1], transform=ax.transAxes)
+        plt.show()
+
+    volume = np.clip(1.0 / fluxErr * 400, 30, 80).astype(int)
+
+    sonify.play_midi_from_data([instrument] + normed_data, track_type='single',
+                               volume = [volume])
+    if save:
+        audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, filter,
+                                             instrument.replace( ' ', '_'), key.replace( ' ', '_'))
+        import subprocess
+        subprocess.check_output('cp soundclip.wav {}'.format(audiofname), shell=True)
+
+
+def multiSonification(data, objectID, instruments=None, key=None,
+                      transposing=False, rescaled=False, noctaves=configs.NOCT,
+                      drone=True,
+                      save=False, plot=True):
+
+    if key is None:
+        key = configs.KEY
+    if instruments is None:
+        instruments = configs.INSTRUMENTS
+    filts = configs.FILTERS
+    objFiltered = data[data["object_id"].isin([objectID])]
+    multiDataWIntsruments = []
+    volume = []
+    for f in filts:
+        objP = objFiltered[objFiltered["passband"].isin([configs.passband[f]])]
+        timeValue = objP["mjd"].values
+        fluxValue = objP["flux"].values
+        fluxErr = objP["flux_err"].values
+        normed_data = gettrack(timeValue, fluxValue, f, key, getrange(objFiltered), noctaves=noctaves,
+                               transposing=transposing, rescaled=rescaled)
+        multiDataWIntsruments.append([instruments[f]] + normed_data)
+        thisvolume = np.clip(np.log(1e4 / (fluxErr)) * 10,
+                             None, 100).astype(int)
+        if f in ['u', 'g', 'r', 'i']:
+            thisvolume = np.ones_like(fluxErr).astype(int)
+        volume.append(thisvolume)
+
+    if plot:
+        print("now plotting")
+        multiPlotObject(data, objectID, instruments,
+                        save=False, show=True)
+        plt.savefig('{}/ID{}_{}.png'.format(configs.OUTDIR, objectID, filter), dpi=300, bbox_inches='tight')
+        plt.show()
+
+    if drone:
+        from .rr_sounds import drone
+        track_drone, track_base = drone()
+        multiDataWIntsruments.append(['voice oohs'] + track_drone)
+        multiDataWIntsruments.append(['voice oohs'] + track_base)
+        # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
+        volume.append([40] * len(track_drone))
+        volume.append([40] * len(track_drone))
+
+    sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
+                               volume=volume)
+
+    if save:
+        audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, key.replace(' ', '_'))
+        import subprocess
+        subprocess.check_output('cp soundclip.wav {}'.format(audiofname), shell=True)
+
