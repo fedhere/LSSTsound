@@ -195,3 +195,16 @@ def multiSonification(data, objectID, instruments=None, key=None,
         audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, key.replace(' ', '_'))
         import subprocess
         subprocess.check_output('cp soundclip.wav {}'.format(audiofname), shell=True)
+
+
+def getIDs(data, dataMETA, objtype):
+    assert objtype in ["SNIbc", "SNe", "EB"], "can only look for SNIbc, SN3, EB, use appropriate string"
+    if objtype in ["SNe", "SNIbc"]:
+        ids = list(configs.SNids.keys())
+        if objtype == "SNIbc":
+            val_list = list(configs.SNids.values())
+            position = val_list.index('SNIbc')
+            ids = [ids[position]]
+    else:
+        ids = [16]
+    return dataMETA[dataMETA["true_target"].isin(ids)].object_id #find the SNe Ibc in the metadata: target 62

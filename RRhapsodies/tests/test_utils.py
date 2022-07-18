@@ -112,3 +112,11 @@ def test_scaling():
 
     npt.assert_equal(keynotes[0], 47)
     npt.assert_equal(keynotes[-1], 64)
+
+def test_getIDs():
+    from rrhapsodies.rr_utils import getIDs
+    from rrhapsodies.rr_utils import readdata
+    data, metadata = readdata()
+    assert 43018203 in getIDs(data, metadata, "SNe").values
+    assert 43018203 in getIDs(data, metadata, "SNIbc").values
+    assert 2677 in getIDs(data, metadata, "EB").values

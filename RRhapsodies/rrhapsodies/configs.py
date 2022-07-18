@@ -51,3 +51,11 @@ def numbers2notes(mindata, maxdata):
         notenumbers[i] = notenumbers[i - 12]
 
     return notenumbers
+
+SNids = {42: "SNII",
+         52: "SNIax",
+         62: "SNIbc",
+         67: "SNIa-91bg",
+         64: "KN",
+         90: "SNIa",
+         95: "SLSN-1"}

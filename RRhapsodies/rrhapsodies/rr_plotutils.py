@@ -62,7 +62,7 @@ def singlePlotObject(data, objectID, filter,
 
     title = 'Object: {} filter: {} '.format(objectID, filter)
     if instrument:
-        title = title + 'instrument: {}'.format(instrument[0])
+        title = title + 'instrument: {}'.format(instrument)
     plt.title(title)
     plt.legend(fontsize=8, loc='upper left', ncol=2)
 
