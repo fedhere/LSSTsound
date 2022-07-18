@@ -133,7 +133,7 @@ multiSonification(data, objectID, instruments=None, key=None,
                      drone=True, save=False, plot=True):
 ```
 
-By setting drone=True. Currently to switch from one to the other you can set the keyword tp "gliss" or "step"
+By unsetting drone=None. Currently to switch from one to the other you can set the keyword tp "gliss" or "step"
 
 ## volume
 I also implemented volume, proportional to the uncertainty in the data (and softer for the drone)
