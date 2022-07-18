@@ -22,6 +22,24 @@ def test_play_c_major():
     sonify.play_midi_from_data(list(zip(np.linspace(1,4,8, endpoint=True),
                                         np.concatenate([y_in_c, [y_in_c[-1] + 1]]))),
                                track_type='single')
+
+
+def test_play_chromatic_scale():
+    from rrhapsodies.rr_sounds import drone
+    import sonifyFED.sonify.core as sonify
+
+
+    x = np.linspace(1,8,12, endpoint=True)
+    y = np.linspace(1,2,12, endpoint=True)
+    data = list(zip(x, y))
+    converted_c_data = sonify.convert_to_key(data, 'chromatic', number_of_octaves=1)
+    x, y_in_c = zip(*converted_c_data)
+    npt.assert_array_equal(y_in_c, np.arange(41, 53).astype(int))
+    sonify.play_midi_from_data(list(zip(x, y_in_c)), track_type='single',
+                              number_of_octaves=1)
+
+
+
 def test_change_volume():
     import numpy as np
     from sonifyFED import sonify
@@ -195,5 +213,14 @@ def test_drone(PLOT=False):
     multiDataWIntsruments = [['voice oohs'] + track_drone,
                              ['voice oohs'] + track_base]
     # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
-    sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple', volume=[[40]*len(track_drone), [40]*len(track_drone)])
+    sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
+                               volume=[[40]*len(track_drone), [40]*len(track_drone)])
 
+def test_drone_glissando():
+    from rrhapsodies.rr_sounds import drone_glissando
+    import sonifyFED.sonify.core as sonify
+    track_drone, track_base = drone_glissando(PLOT=True)
+    multiDataWIntsruments = [['voice oohs'] + track_drone,
+                             ['voice oohs'] + track_base]
+    sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
+                               volume=[[40] * len(track_drone), [40] * len(track_drone)])

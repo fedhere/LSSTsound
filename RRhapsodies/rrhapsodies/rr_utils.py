@@ -136,8 +136,7 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
 
 def multiSonification(data, objectID, instruments=None, key=None,
                       transposing=False, rescaled=False, noctaves=configs.NOCT,
-                      drone=True,
-                      save=False, plot=True):
+                      drone=True, save=False, plot=True):
 
     if key is None:
         key = configs.KEY
@@ -169,8 +168,8 @@ def multiSonification(data, objectID, instruments=None, key=None,
         plt.show()
 
     if drone:
-        from .rr_sounds import drone
-        track_drone, track_base = drone()
+        from .rr_sounds import drone_glissando
+        track_drone, track_base = drone_glissando()
         multiDataWIntsruments.append(['voice oohs'] + track_drone)
         multiDataWIntsruments.append(['voice oohs'] + track_base)
         # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
