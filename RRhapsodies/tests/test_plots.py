@@ -1,5 +1,3 @@
-import numpy.testing as npt
-import pytest
 
 def test_singlePlotObject():
     from rrhapsodies.configs import INSTRUMENTS

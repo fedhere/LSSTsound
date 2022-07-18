@@ -4,63 +4,58 @@ import pytest
 
 
 def test_play_c_major():
-    import numpy as np
     from sonifyFED import sonify
 
-    x = np.linspace(1,4,7, endpoint=True)
-    y = np.linspace(1,2,7, endpoint=True)
+    x = np.linspace(1, 4, 7, endpoint=True)
+    y = np.linspace(1, 2, 7, endpoint=True)
     data = list(zip(x, y))
     converted_c_data = sonify.convert_to_key(data, 'c_major', number_of_octaves=1)
     x, y_in_c = zip(*converted_c_data)
 
     sonify.play_midi_from_data(list(zip(x, y_in_c)), track_type='single', key='c_major',
-                              number_of_octaves=1)
+                               number_of_octaves=1)
     assert y_in_c[0] == 36
     assert y_in_c[-1] == 47
 
-    #adding the high C
-    sonify.play_midi_from_data(list(zip(np.linspace(1,4,8, endpoint=True),
+    # adding the high C
+    sonify.play_midi_from_data(list(zip(np.linspace(1, 4, 8, endpoint=True),
                                         np.concatenate([y_in_c, [y_in_c[-1] + 1]]))),
                                track_type='single')
 
 
 def test_play_chromatic_scale():
-    from rrhapsodies.rr_sounds import drone
     import sonifyFED.sonify.core as sonify
 
-
-    x = np.linspace(1,8,12, endpoint=True)
-    y = np.linspace(1,2,12, endpoint=True)
+    x = np.linspace(1, 8, 12, endpoint=True)
+    y = np.linspace(1, 2, 12, endpoint=True)
     data = list(zip(x, y))
     converted_c_data = sonify.convert_to_key(data, 'chromatic', number_of_octaves=1)
     x, y_in_c = zip(*converted_c_data)
     npt.assert_array_equal(y_in_c, np.arange(41, 53).astype(int))
     sonify.play_midi_from_data(list(zip(x, y_in_c)), track_type='single',
-                              number_of_octaves=1)
-
+                               number_of_octaves=1)
 
 
 def test_change_volume():
-    import numpy as np
     from sonifyFED import sonify
 
-    x = np.linspace(1,4,7, endpoint=True)
-    y = np.linspace(1,2,7, endpoint=True)
+    x = np.linspace(1, 4, 7, endpoint=True)
+    y = np.linspace(1, 2, 7, endpoint=True)
     data = list(zip(x, y))
     converted_c_data = sonify.convert_to_key(data, 'c_major', number_of_octaves=1)
     x, y_in_c = zip(*converted_c_data)
 
     sonify.play_midi_from_data(list(zip(x, y_in_c)), track_type='single', key='c_major',
-                              number_of_octaves=1, volume=[np.linspace(30,100,7,endpoint=True).astype(int)])
+                               number_of_octaves=1, volume=[np.linspace(30, 100, 7, endpoint=True).astype(int)])
     sonify.play_midi_from_data(list(zip(x, y_in_c)), track_type='single', key='c_major',
-                              number_of_octaves=1, volume=[np.linspace(30,100,7,endpoint=True)[::-1].astype(int)])
+                               number_of_octaves=1, volume=[np.linspace(30, 100, 7, endpoint=True)[::-1].astype(int)])
+
 
 def test_play_f_major_lydian():
-    import numpy as np
     from sonifyFED import sonify
 
-    x = np.linspace(1,4,7, endpoint=True)
-    y = np.linspace(1,2,7, endpoint=True)
+    x = np.linspace(1, 4, 7, endpoint=True)
+    y = np.linspace(1, 2, 7, endpoint=True)
     data = list(zip(x, y))
     converted_c_data = sonify.convert_to_key(data, 'f_major_lydian', number_of_octaves=1)
     x, y_in_c = zip(*converted_c_data)
@@ -69,12 +64,12 @@ def test_play_f_major_lydian():
     assert y_in_c[0] == 41
     assert y_in_c[-1] == 52
 
-    sonify.play_midi_from_data(list(zip(np.linspace(1,4,8, endpoint=True),
+    sonify.play_midi_from_data(list(zip(np.linspace(1, 4, 8, endpoint=True),
                                         np.concatenate([y_in_c, [y_in_c[-1] + 1]]))),
                                track_type='single')
 
+
 def test_play_instruments():
-    import numpy as np
     from sonifyFED import sonify
     from rrhapsodies.configs import INSTRUMENTS, FILTERS, TRANSPOSITIONS
     from rrhapsodies.rr_utils import transpose
@@ -91,10 +86,11 @@ def test_play_instruments():
         x, y_in_c = zip(*converted_c_data[1:])
         print(INSTRUMENTS[f])
         notes = transpose(np.concatenate([y_in_c, [y_in_c[-1] + 1]]), down=False,
-                          intervals = TRANSPOSITIONS[f])
+                          intervals=TRANSPOSITIONS[f])
         sonify.play_midi_from_data([INSTRUMENTS[f]] +
-                                   list(zip(np.linspace(1,4,8, endpoint=True), notes)),
-                                    track_type='single')
+                                   list(zip(np.linspace(1, 4, 8, endpoint=True), notes)),
+                                   track_type='single')
+
 
 def test_prep_sonification():
     from rrhapsodies.rr_utils import prep_sonification
@@ -114,17 +110,16 @@ def test_prep_sonification():
 
     print("test transpose")
     track = prep_sonification(x_points, y_points, key=key,
-                  noctaves=noctaves, t_min=t_min, t_max=t_max, filter='g',
-                  transposing=True, rescaling=None)
+                              noctaves=noctaves, t_min=t_min, t_max=t_max, filter='g',
+                              transposing=True, rescaling=None)
     npt.assert_array_equal(np.array([(1.0, 41), (3.0, 43), (5.0, 45),
-                                     (7.0, 46), (9., 48), (11., 50), (13.,52)]),
+                                     (7.0, 46), (9., 48), (11., 50), (13., 52)]),
                            track)
 
     print("test rescale")
     track = prep_sonification(x_points, y_points, key=key,
-                                             noctaves=noctaves, t_min=t_min, t_max=t_max,
-                                             filter='r',
-                                             transposing=False, rescaling=[1, -2])
+                              noctaves=noctaves, t_min=t_min, t_max=t_max,
+                              filter='r', transposing=False, rescaling=[1, -2])
 
     npt.assert_array_equal(np.array([(1.0, 38), (3., 38), (5., 40),
                                      (7.0, 40), (9.0, 41), (11, 43), (13.0, 43)]),
@@ -132,9 +127,9 @@ def test_prep_sonification():
 
     print("test change min max time")
     track = prep_sonification(x_points, y_points, key=key,
-                            noctaves=noctaves, t_min=2, t_max=14,
-                            filter='r',
-                            transposing=False, rescaling=[1, -2])
+                              noctaves=noctaves, t_min=2, t_max=14,
+                              filter='r',
+                              transposing=False, rescaling=[1, -2])
     print(track)
 
     npt.assert_array_equal(np.array([(2.0, 38), (4., 38), (6., 40),
@@ -142,29 +137,28 @@ def test_prep_sonification():
                            track)
 
 
-def test_gettrack(PLOT=False):
+def test_gettrack(plot=False):
     from sonifyFED.sonify import core as sonify
     from rrhapsodies.rr_utils import gettrack, readdata, getrange
     from rrhapsodies import configs as configs
     from pylab import plt
 
-    t = np.linspace(1,4,8)
+    t = np.linspace(1, 4, 8)
     f = np.arange(8)
 
     track = gettrack(t, f, 'i', 'c_major', (1, 10), noctaves=1,
-             transposing=False, rescaled=False)
+                     transposing=False, rescaled=False)
 
     sonify.play_midi_from_data(track, track_type='single')
 
-
     track = gettrack(t, f, 'r', 'c_major', (1, 10), noctaves=1,
-                   transposing=True, rescaled=False)
+                     transposing=True, rescaled=False)
     print(track)
 
     sonify.play_midi_from_data(track, track_type='single')
 
     track = gettrack(t, f, 'r', 'c_major', (-10, 20), noctaves=1,
-             transposing=True, rescaled=True)
+                     transposing=True, rescaled=True)
     print(track)
 
     sonify.play_midi_from_data(track, track_type='single')
@@ -180,7 +174,7 @@ def test_gettrack(PLOT=False):
     t, n = list(zip(*track))
     t = np.array(t)
 
-    if PLOT:
+    if plot:
         fig, ax = plt.subplots(2, 1)
 
         ax[0].plot(objP["mjd"].values, objP["flux"].values, '-')
@@ -206,7 +200,7 @@ def test_gettrack(PLOT=False):
     sonify.play_midi_from_data(track, track_type='single')
 
 
-def test_drone(PLOT=False):
+def test_drone():
     from rrhapsodies.rr_sounds import drone
     import sonifyFED.sonify.core as sonify
     track_drone, track_base = drone()
@@ -215,6 +209,7 @@ def test_drone(PLOT=False):
     # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
                                volume=[[40]*len(track_drone), [40]*len(track_drone)])
+
 
 def test_drone_glissando():
     from rrhapsodies.rr_sounds import drone_glissando

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from . import configs
 import numpy as np
 
+
 def setax2ticks(ax):
     ax2 = ax.twinx()
     ax2.set_ylabel('notes')
@@ -10,11 +11,12 @@ def setax2ticks(ax):
     ticks = np.array(np.array(ax.get_yticks()).astype(int))
     ax2.set_yticks(ticks, [configs.numbers2notes(ticks[0], ticks[-1])[t] for t in ticks])
 
+
 def plotlc(objFiltered, ax, filter=None, instruments=None):
     filts = configs.FILTERS
     if instruments is None:
         instruments = configs.INSTRUMENTS
-    if not filter is None:
+    if filter is not None:
         assert isinstance(filter, str), "the filter should be a single character string"
 
     for i, f in enumerate(filts):
@@ -37,7 +39,8 @@ def plotlc(objFiltered, ax, filter=None, instruments=None):
             alpha = 1 if f == filter else 0.2
 
             ax.errorbar(timeValue, fluxValue, yerr=fluxerrValue, marker='o', color=color,
-                     linestyle='none', label=f, alpha=alpha)
+                        linestyle='none', label=f, alpha=alpha)
+
 
 def singlePlotObject(data, objectID, filter,
                      instrument=None, save=False, show=True):
@@ -80,7 +83,8 @@ def multiPlotObject(data, objectID, instruments,
     """ plots a multi band object from a Plasticc object:
     arguments:
     objectID: int: the PLAsTiCC object id
-    instruments: list or array: a list of strings indicating musical instrument available in the SonifyFED library configurations
+    instruments: list or array: a list of strings indicating musical instrument
+                available in the SonifyFED library configurations
     save: bool: if True saves the plot as a png file (default True)
     """
     fig, ax = plt.subplots(1, 1, figsize=(10, 3.5))
@@ -100,7 +104,6 @@ def multiPlotObject(data, objectID, instruments,
         plt.show()
 
     if save:
-       plt.savefig('ID{}_multi.png'.format(objectID), dpi=300, bbox_inches='tight')
-
+        plt.savefig('ID{}_multi.png'.format(objectID), dpi=300, bbox_inches='tight')
 
     return fig, ax
