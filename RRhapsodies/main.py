@@ -8,7 +8,7 @@ from rrhapsodies import configs
 if __name__ == '__main__':
     data, metadata = rr_utils.readdata()
     thisband = 'r'
-    object = 43018203
+    object = 2677
     if False:
         for thisband in ['u', 'g', 'r', 'i', 'z', 'y']:
             print("object:", object, "band", thisband, configs.INSTRUMENTS[thisband],
@@ -19,5 +19,5 @@ if __name__ == '__main__':
                                 key=configs.KEY, save=True, plot=True)
 
     rr_utils.multiSonification(data, object, key=configs.KEY,
-                               drone=True, save=True, plot=True)
+                               drone="gliss", save=True, plot=True)
 
