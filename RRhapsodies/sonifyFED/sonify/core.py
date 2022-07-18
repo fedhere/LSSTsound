@@ -16,6 +16,7 @@ def make_first_number_match_key(y_values, notes_in_key):
     return new_y
 
 def convert_to_key(data, key, number_of_octaves=4,
+                   octave_start=1,
                    minmaxvalue=None):
     instrument, instrument_type = None, None
     if type(data[0]) != tuple:
@@ -30,7 +31,7 @@ def convert_to_key(data, key, number_of_octaves=4,
         # Finding the index of the note closest to all the notes in the options list
         notes_in_key = key_name_to_notes(key, number_of_octaves=number_of_octaves)
 
-        if not minmaxvalue is None:
+        if minmaxvalue is not None:
             if minmaxvalue[1] <= -1:
                 notes_in_key = notes_in_key[minmaxvalue[0]:minmaxvalue[1]]
             else:
