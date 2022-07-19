@@ -27,8 +27,8 @@ def transpose(notes, down=False, interval=5, intervals=1):
 def readdata(path=None, root=None):
     if path is None:
         from rrhapsodies.configs import DATA_PATH as path
-        if root is None:
-            root = path["path"]
+    if root is None:
+        root = path["path"]
     try:
         data = pd.read_csv(root + path["data"])
         metadata = pd.read_csv(root + "/" + path["metadata"])
