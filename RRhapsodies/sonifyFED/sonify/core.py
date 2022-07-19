@@ -1,5 +1,4 @@
 import io
-import pyaudio
 import pygame
 from pretty_midi import note_name_to_number
 from midiutil.MidiFile import MIDIFile
@@ -31,6 +30,7 @@ def convert_to_key(data, key, number_of_octaves=4,
         # Finding the index of the note closest to all the notes in the options list
         notes_in_key = key_name_to_notes(key, number_of_octaves=number_of_octaves)
 
+        # FBB July 17 2022
         if minmaxvalue is not None:
             if minmaxvalue[1] <= -1:
                 notes_in_key = notes_in_key[minmaxvalue[0]:minmaxvalue[1]]
@@ -129,8 +129,8 @@ def get_instrument(instrument_name):
             raise AttributeError('No instrument or percussion could be found by that name')
     return program_number - 1, instrument_type
 
-
-def write_to_midifile(data, track_type='single', volume=90):
+#RWC 7/22 - added notebook kwarg to write_to_midifile
+def write_to_midifile(data, track_type='single', volume=90, colab=False):
     """
     data: list of tuples of x, y coordinates for pitch and timing
           Optional: add a string to the start of the data list to specify instrument!
@@ -159,8 +159,6 @@ def write_to_midifile(data, track_type='single', volume=90):
         instrument_type = 'melodic'
         if type(data_list[0]) != tuple:
             program, instrument_type = get_instrument(data_list.pop(0))
-        if type(data_list[0]) != tuple:
-            program, instrument_type = data_list.pop(0)
 
         if instrument_type == 'percussion':
             #print("now")
@@ -184,11 +182,19 @@ def write_to_midifile(data, track_type='single', volume=90):
 
     midifile.writeFile(memfile)
 
+    ###RWC edit 7/22 to save midi file to working dir
+    if colab:
+      with open("midioutput.mid", 'wb') as binfile:
+        midifile.writeFile(binfile)
+
+
     return memfile
 
 
-def play_memfile_as_midi(memfile, verbose=False):
+def play_memfile_as_midi(memfile, verbose=False, colab=False):
     # https://stackoverflow.com/questions/27279864/generate-midi-file-and-play-it-without-saving-it-to-disk
+    #RWC 7/22 - moved pyaudio import here - it is not compatible with colab
+    import pyaudio
     pygame.init()
     pygame.mixer.init()
     memfile.seek(0)
@@ -212,7 +218,7 @@ def play_memfile_as_midi(memfile, verbose=False):
         frames.append(stream.read(buffer,exception_on_overflow=False))
         #sleep(1)
     
-    if verbose:
+    if verbose: # FBB added July 22
         print("* done recording")
     stream.stop_stream()
     stream.close()
@@ -221,20 +227,20 @@ def play_memfile_as_midi(memfile, verbose=False):
     wave_file.setnchannels(channels)
     wave_file.setsampwidth(audio.get_sample_size(format))
     wave_file.setframerate(sample_rate)
-    if verbose:
+    if verbose:  # FBB added July 22
         print("Saving")
     
     # Write the frames to the wave file
     wave_file.writeframes(b''.join(frames))
     wave_file.close()
     audio.terminate()
-    if verbose:
+    if verbose:  # FBB added July 22
         print('Done playing!')
 
-
+# FBB add colab argument in input for colab compatibility
 def play_midi_from_data(input_data, key=None, number_of_octaves=4,
                         track_type='single', octave_start=1,
-                        volume=100):
+                        volume=100, colab=False):
     """
     input_data: a list of tuples, or a list of lists of tuples to add as separate tracks
     eg:
@@ -269,6 +275,12 @@ def play_midi_from_data(input_data, key=None, number_of_octaves=4,
     else:
         data = input_data
     #print(volume)
-    memfile = write_to_midifile(data, track_type, volume=volume)
+    ### FBB change 07/22 to enable running on colab platform
+    if colab:
+        return
+    memfile = write_to_midifile(data, track_type, volume=volume,
+                                colab=colab)
+    if colab:
+        return
     play_memfile_as_midi(memfile)
 

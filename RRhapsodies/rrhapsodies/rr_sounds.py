@@ -53,6 +53,7 @@ def drone(data=None, PLOT=False):
 def drone_glissando(data=None, PLOT=False):
     import sonifyFED.sonify.core as sonify
     if data is None:
+        from .rr_utils import readdata
         data, _ = readdata()
 
     duration = int(data.mjd.max() - data.mjd.min() + 0.5)

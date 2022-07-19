@@ -8,6 +8,6 @@ def test_singlePlotObject():
     objectID, filter, key = 43018203, 'r', 'c_major',
     instrument = INSTRUMENTS[filter],
 
-    singlePlotObject(data, objectID, filter, key=key,
+    singlePlotObject(data, objectID, filter,
                      instrument=instrument, save=False, show=True)
 
