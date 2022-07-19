@@ -140,7 +140,7 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
 
     sonify.play_midi_from_data([instrument] + normed_data, track_type='single',
                                volume=[volume], colab=colab)
-    if save:
+    if save and not colab:
         audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, filter,
                                              instrument.replace(' ', '_'), key.replace(' ', '_'))
         import subprocess
