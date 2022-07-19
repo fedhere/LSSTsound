@@ -129,6 +129,7 @@ def get_instrument(instrument_name):
             raise AttributeError('No instrument or percussion could be found by that name')
     return program_number - 1, instrument_type
 
+
 #RWC 7/22 - added notebook kwarg to write_to_midifile
 def write_to_midifile(data, track_type='single', volume=90, colab=False):
     """
@@ -184,14 +185,14 @@ def write_to_midifile(data, track_type='single', volume=90, colab=False):
 
     ###RWC edit 7/22 to save midi file to working dir
     if colab:
-      with open("midioutput.mid", 'wb') as binfile:
-        midifile.writeFile(binfile)
-
+        print("saving to midi file")
+        with open("midioutput.mid", 'wb') as binfile:
+            midifile.writeFile(binfile)
 
     return memfile
 
 
-def play_memfile_as_midi(memfile, verbose=False, colab=False):
+def play_memfile_as_midi(memfile, verbose=False):
     # https://stackoverflow.com/questions/27279864/generate-midi-file-and-play-it-without-saving-it-to-disk
     #RWC 7/22 - moved pyaudio import here - it is not compatible with colab
     import pyaudio
@@ -274,10 +275,8 @@ def play_midi_from_data(input_data, key=None, number_of_octaves=4,
             data = convert_to_key(input_data, key, number_of_octaves)
     else:
         data = input_data
-    #print(volume)
+
     ### FBB change 07/22 to enable running on colab platform
-    if colab:
-        return
     memfile = write_to_midifile(data, track_type, volume=volume,
                                 colab=colab)
     if colab:

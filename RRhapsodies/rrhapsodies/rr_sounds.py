@@ -23,6 +23,7 @@ def sine_drone(f1, f2, fbase, period=0.5, sampleRate=10000, length=15):
 def drone(data=None, PLOT=False):
     import sonifyFED.sonify.core as sonify
     if data is None:
+        from .rr_utils import readdata
         data, _ = readdata()
     duration = int(data.mjd.max() - data.mjd.min() + 0.5)
     cycles = duration / 365.25
@@ -89,7 +90,10 @@ def drum_beat(drum, data=None):
         data, _ = readdata()
     duration = int(data.mjd.max() - data.mjd.min() + 0.5)
     mooncycles = int(duration / 28 + 0.5)
-    time = np.linspace(0, 15, mooncycles)
-    y = np.ones_like(time)
-    data = list(zip(time, y))
-    return data
+    years = int(duration / 365.25 + 0.5)
+    time1 = np.linspace(0, 15, mooncycles)
+    y1 = np.ones_like(time1)
+    time2 = np.linspace(0, 15, years)
+    y2 = np.ones_like(time2)
+
+    return list(zip(time1, y1)), list(zip(time2, y2))

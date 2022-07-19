@@ -150,7 +150,7 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
 def multiSonification(data, objectID, instruments=None, key=None,
                       transposing=False, rescaled=False, noctaves=configs.NOCT,
                       drone="gliss", drum=None,
-                      save=False, plot=True):
+                      save=False, plot=True, colab=False):
 
     if key is None:
         key = configs.KEY
@@ -185,7 +185,7 @@ def multiSonification(data, objectID, instruments=None, key=None,
         assert drone in ["gliss", "step"], 'Current drone options are glissando "gliss" and step "step"'
         if drone == "gliss":
             from .rr_sounds import drone_glissando
-            track_drone, track_base = drone_glissando(root="data")
+            track_drone, track_base = drone_glissando()
         elif drone == "step":
             from .rr_sounds import drone
             track_drone, track_base = drone()
@@ -193,17 +193,19 @@ def multiSonification(data, objectID, instruments=None, key=None,
         multiDataWIntsruments.append(['voice oohs'] + track_drone)
         multiDataWIntsruments.append(['voice oohs'] + track_base)
         # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
-        volume.append([40] * len(track_drone))
-        volume.append([40] * len(track_drone))
+        volume.append([50] * len(track_drone))
+        volume.append([50] * len(track_drone))
     if drum is not None:
         from .rr_sounds import drum_beat
-        track_drum = drum_beat(drum)
-        multiDataWIntsruments.append([drum] + track_drum)
+        track_drum1, track_drum2 = drum_beat(drum)
+        multiDataWIntsruments.append([drum] + track_drum1)
+        volume.append([20] * len(track_drone))
+        multiDataWIntsruments.append([drum] + track_drum2)
         volume.append([40] * len(track_drone))
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
-                               volume=volume)
+                               volume=volume, colab=colab)
 
-    if save:
+    if save and not colab:
         audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, key.replace(' ', '_'))
         import subprocess
         subprocess.check_output('cp soundclip.wav {}'.format(audiofname), shell=True)
