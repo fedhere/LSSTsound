@@ -164,7 +164,8 @@ def write_to_midifile(data, track_type='single', volume=90):
 
         if instrument_type == 'percussion':
             #print("now")
-            #volume = 100
+            #FBB 7/18/22 removed volume=100 so drums can be at different volume
+            # volume = 100
             channel = 9
             
         # Write the notes we want to appear in the file
