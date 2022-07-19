@@ -29,9 +29,13 @@ def readdata(path=None, root=None):
         from rrhapsodies.configs import DATA_PATH as path
         if root is None:
             root = path["path"]
-    print(root + "/" + path["data"])
-    data = pd.read_csv(root + "/" + path["data"])
-    metadata = pd.read_csv(root + "/" + path["metadata"])
+    try:
+        data = pd.read_csv(root + path["data"])
+        metadata = pd.read_csv(root + "/" + path["metadata"])
+    except FileNotFoundError:
+        data = pd.read_csv("../" + root + path["data"])
+        metadata = pd.read_csv("../" + root + "/" + path["metadata"])
+
     return data, metadata
 
 

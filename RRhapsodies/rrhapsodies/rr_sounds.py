@@ -20,11 +20,10 @@ def sine_drone(f1, f2, fbase, period=0.5, sampleRate=10000, length=15):
     return np.sin(phi), np.sin(2 * np.pi * fbase * t), f_inst
 
 
-def drone(PLOT=False):  # "C", "F", "A"):
-    from .rr_utils import readdata
+def drone(data=None, PLOT=False):
     import sonifyFED.sonify.core as sonify
-
-    data, _ = readdata()
+    if data is None:
+        data, _ = readdata()
     duration = int(data.mjd.max() - data.mjd.min() + 0.5)
     cycles = duration / 365.25
     N = int(cycles * 13 + 0.5)  # one note per moon cycle?
@@ -51,13 +50,10 @@ def drone(PLOT=False):  # "C", "F", "A"):
     return list(zip(quantized_x, dronenote)), list(zip(quantized_x, dronebase))
 
 
-def drone_glissando(data=None, root=None, PLOT=False):
+def drone_glissando(data=None, PLOT=False):
     import sonifyFED.sonify.core as sonify
     if data is None:
-        from .rr_utils import readdata
-        if root is None:
-            root = "../data"
-        data, _ = readdata(root=root)
+        data, _ = readdata()
 
     duration = int(data.mjd.max() - data.mjd.min() + 0.5)
     years = duration / 365.25  # duration in years (22 notes)
