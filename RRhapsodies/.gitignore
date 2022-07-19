@@ -5,3 +5,4 @@
 .venv
 *wav
 *png
+.pytest_cache
