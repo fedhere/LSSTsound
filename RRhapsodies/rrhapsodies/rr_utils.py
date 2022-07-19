@@ -99,7 +99,7 @@ def gettrack(x, y, filter, key, minmaxflux, transposing=False,
 def singleSonification(data, objectID, filter, instrument=None, key=None,
                        noctaves=configs.NOCT,
                        transposing=False, rescaled=False,
-                       save=False, plot=False, diagonsticplots=False):
+                       save=False, plot=False, diagonsticplots=False, colab=False):
     if key is None:
         key = configs.KEY
     filters = configs.FILTERS
@@ -139,7 +139,7 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
     volume = np.clip(1.0 / fluxErr * 400, 30, 80).astype(int)
 
     sonify.play_midi_from_data([instrument] + normed_data, track_type='single',
-                               volume=[volume])
+                               volume=[volume], colab=colab)
     if save:
         audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, filter,
                                              instrument.replace(' ', '_'), key.replace(' ', '_'))
