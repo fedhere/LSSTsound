@@ -1,6 +1,6 @@
 import io
 from time import sleep
-
+import pyaudio
 import pygame
 from pretty_midi import note_name_to_number
 from midiutil.MidiFile import MIDIFile
@@ -189,10 +189,42 @@ def play_memfile_as_midi(memfile):
     memfile.seek(0)
     pygame.mixer.music.load(memfile)
     pygame.mixer.music.play()
+
+    sample_rate = 44100         # Sample rate used for WAV/MP3
+    channels = 1             # Audio channels (1 = mono, 2 = stereo)
+    buffer = 2048               # Audio buffer size
+    input_device = 0     
+
+    format = pyaudio.paInt16
+    audio = pyaudio.PyAudio()
+
+    stream = audio.open(format=format, channels=channels,
+                        rate=sample_rate, input=True, 
+    input_device_index=input_device, frames_per_buffer=buffer)
+    frames = []
+
     while pygame.mixer.music.get_busy():
-        sleep(1)
+        frames.append(stream.read(buffer,exception_on_overflow=False))
+        #sleep(1)
+    
+    print("* done recording")
+    stream.stop_stream()
+    stream.close()
+    # Configure wave file settings
+    wave_file = wave.open("soundclip.wav", 'wb')
+    wave_file.setnchannels(channels)
+    wave_file.setsampwidth(audio.get_sample_size(format))
+    wave_file.setframerate(sample_rate)
+    
+    print("Saving")   
+    
+    # Write the frames to the wave file
+    wave_file.writeframes(b''.join(frames))
+    wave_file.close()
+    audio.terminate()    
     print('Done playing!')
 
+    
 
 def play_midi_from_data(input_data, key=None, number_of_octaves=4,
                         track_type='single', octave_start=1,
