@@ -184,14 +184,14 @@ def write_to_midifile(data, track_type='single', volume=90, colab=False):
     midifile.writeFile(memfile)
 
     ###RWC edit 7/22 to save midi file to working dir
-    if colab:
-        print("saving to midi file")
-        with open("midioutput.mid", 'wb') as binfile:
-            midifile.writeFile(binfile)
+    #if colab:
+    print("Saving to midi file")
+    with open("midioutput.mid", 'wb') as binfile:
+        midifile.writeFile(binfile)
 
     return memfile
 
-
+#RWC 7/22 - added verbose kwarg
 def play_memfile_as_midi(memfile, verbose=False):
     # https://stackoverflow.com/questions/27279864/generate-midi-file-and-play-it-without-saving-it-to-disk
     #RWC 7/22 - moved pyaudio import here - it is not compatible with colab
@@ -220,7 +220,7 @@ def play_memfile_as_midi(memfile, verbose=False):
         #sleep(1)
     
     if verbose: # FBB added July 22
-        print("* done recording")
+        print("Done recording")
     stream.stop_stream()
     stream.close()
     # Configure wave file settings
@@ -241,7 +241,7 @@ def play_memfile_as_midi(memfile, verbose=False):
 # FBB add colab argument in input for colab compatibility
 def play_midi_from_data(input_data, key=None, number_of_octaves=4,
                         track_type='single', octave_start=1,
-                        volume=100, colab=False):
+                        volume=100, colab=False, verbose=False):
     """
     input_data: a list of tuples, or a list of lists of tuples to add as separate tracks
     eg:
@@ -281,5 +281,5 @@ def play_midi_from_data(input_data, key=None, number_of_octaves=4,
                                 colab=colab)
     if colab:
         return
-    play_memfile_as_midi(memfile)
+    play_memfile_as_midi(memfile, verbose=verbose)
 

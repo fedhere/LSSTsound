@@ -95,5 +95,4 @@ def drum_beat(drum, data=None):
     y1 = np.ones_like(time1)
     time2 = np.linspace(0, 15, years)
     y2 = np.ones_like(time2)
-
     return list(zip(time1, y1)), list(zip(time2, y2))

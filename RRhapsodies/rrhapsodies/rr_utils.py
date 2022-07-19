@@ -99,7 +99,7 @@ def gettrack(x, y, filter, key, minmaxflux, transposing=False,
 def singleSonification(data, objectID, filter, instrument=None, key=None,
                        noctaves=configs.NOCT,
                        transposing=False, rescaled=False,
-                       save=False, plot=False, diagonsticplots=False, colab=False):
+                       save=False, plot=False, diagonsticplots=False, colab=False, verbose=True):
     if key is None:
         key = configs.KEY
     filters = configs.FILTERS
@@ -139,7 +139,7 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
     volume = np.clip(1.0 / fluxErr * 400, 30, 80).astype(int)
 
     sonify.play_midi_from_data([instrument] + normed_data, track_type='single',
-                               volume=[volume], colab=colab)
+                               volume=[volume], colab=colab, verbose=verbose)
     if save and not colab:
         audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, filter,
                                              instrument.replace(' ', '_'), key.replace(' ', '_'))
@@ -150,7 +150,7 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
 def multiSonification(data, objectID, instruments=None, key=None,
                       transposing=False, rescaled=False, noctaves=configs.NOCT,
                       drone="gliss", drum=None,
-                      save=False, plot=True, colab=False):
+                      save=False, plot=True, colab=False, verbose=True):
 
     if key is None:
         key = configs.KEY
@@ -178,7 +178,7 @@ def multiSonification(data, objectID, instruments=None, key=None,
         print("now plotting")
         multiPlotObject(data, objectID, instruments,
                         save=False, show=True)
-        plt.savefig('{}/ID{}_{}.png'.format(configs.OUTDIR, objectID, filter), dpi=300, bbox_inches='tight')
+        plt.savefig('{}/ID{}.png'.format(configs.OUTDIR, objectID), dpi=300, bbox_inches='tight')
         plt.show()
 
     if drone is not None:
@@ -201,9 +201,9 @@ def multiSonification(data, objectID, instruments=None, key=None,
         multiDataWIntsruments.append([drum] + track_drum1)
         volume.append([20] * len(track_drone))
         multiDataWIntsruments.append([drum] + track_drum2)
-        volume.append([40] * len(track_drone))
+        volume.append([60] * len(track_drone))
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
-                               volume=volume, colab=colab)
+                               volume=volume, colab=colab, verbose=verbose)
 
     if save and not colab:
         audiofname = '{}/ID{}_{}.wav'.format(configs.OUTDIR, objectID, key.replace(' ', '_'))
