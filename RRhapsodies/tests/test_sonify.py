@@ -214,6 +214,7 @@ def test_drone():
 def test_drone_glissando():
     from rrhapsodies.rr_sounds import drone_glissando
     import sonifyFED.sonify.core as sonify
+<<<<<<< HEAD
     track_drone, track_base = drone_glissando(PLOT=False)
     multiDataWIntsruments = [['voice oohs'] + track_drone,
                              ['voice oohs'] + track_base]
@@ -233,3 +234,10 @@ def test_drum():
 
     sonify.play_midi_from_data(['crash cymbal 1'] + data, track_type='single', key='c_major',
                                number_of_octaves=1)
+=======
+    track_drone, track_base = drone_glissando(PLOT=True)
+    multiDataWIntsruments = [['voice oohs'] + track_drone,
+                             ['voice oohs'] + track_base]
+    sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
+                               volume=[[40] * len(track_drone), [40] * len(track_drone)])
+>>>>>>> 6771a4e280041380882fab8a8b9e1699d633c906
