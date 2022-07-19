@@ -7,7 +7,6 @@ import pytest
 
 def test_make_c_major():
     from sonifyFED import sonify
-
     x = np.linspace(1, 4, 7, endpoint=True)
     y = np.linspace(1, 2, 7, endpoint=True)
     data = list(zip(x, y))
@@ -19,7 +18,6 @@ def test_make_c_major():
 
 def test_make_f_lydian():
     from sonifyFED import sonify
-
     x = np.linspace(1, 4, 7, endpoint=True)
     y = np.linspace(1, 2, 7, endpoint=True)
     data = list(zip(x, y))
@@ -55,7 +53,7 @@ def test_rescale_flux():
 
 def test_get_data():
     from rrhapsodies.rr_utils import readdata
-    data, metadata = readdata()
+    data, metadata = readdata(root="../data")
     for c in ['object_id', 'mjd', 'passband', 'flux', 'flux_err']:
         assert c in data.columns
     assert 'object_id' in metadata.columns

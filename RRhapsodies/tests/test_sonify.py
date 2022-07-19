@@ -214,7 +214,7 @@ def test_drone():
 def test_drone_glissando():
     from rrhapsodies.rr_sounds import drone_glissando
     import sonifyFED.sonify.core as sonify
-    track_drone, track_base = drone_glissando(PLOT=False)
+    track_drone, track_base = drone_glissando(root="../data", PLOT=False)
     multiDataWIntsruments = [['voice oohs'] + track_drone,
                              ['voice oohs'] + track_base]
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',

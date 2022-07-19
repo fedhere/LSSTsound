@@ -24,11 +24,14 @@ def transpose(notes, down=False, interval=5, intervals=1):
     return notes + sign * interval * intervals  # transpose by n intervals, each of n notes in the scale (default 5)
 
 
-def readdata(path=None):
+def readdata(path=None, root=None):
     if path is None:
         from rrhapsodies.configs import DATA_PATH as path
-    data = pd.read_csv(path["data"])
-    metadata = pd.read_csv(path["metadata"])
+        if root is None:
+            root = path["path"]
+    print(root + "/" + path["data"])
+    data = pd.read_csv(root + "/" + path["data"])
+    metadata = pd.read_csv(root + "/" + path["metadata"])
     return data, metadata
 
 
@@ -178,7 +181,7 @@ def multiSonification(data, objectID, instruments=None, key=None,
         assert drone in ["gliss", "step"], 'Current drone options are glissando "gliss" and step "step"'
         if drone == "gliss":
             from .rr_sounds import drone_glissando
-            track_drone, track_base = drone_glissando()
+            track_drone, track_base = drone_glissando(root="data")
         elif drone == "step":
             from .rr_sounds import drone
             track_drone, track_base = drone()

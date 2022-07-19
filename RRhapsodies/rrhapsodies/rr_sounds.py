@@ -51,11 +51,14 @@ def drone(PLOT=False):  # "C", "F", "A"):
     return list(zip(quantized_x, dronenote)), list(zip(quantized_x, dronebase))
 
 
-def drone_glissando(data=None, PLOT=False):
+def drone_glissando(data=None, root=None, PLOT=False):
     import sonifyFED.sonify.core as sonify
     if data is None:
         from .rr_utils import readdata
-        data, _ = readdata()
+        if root is None:
+            root = "../data"
+        data, _ = readdata(root=root)
+
     duration = int(data.mjd.max() - data.mjd.min() + 0.5)
     years = duration / 365.25  # duration in years (22 notes)
     time = np.linspace(0, 15, int(22 * years + 0.5))

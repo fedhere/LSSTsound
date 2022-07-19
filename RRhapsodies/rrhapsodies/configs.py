@@ -19,8 +19,9 @@ INSTRUMENTS = {'u': 'flute',
 
 KEY = 'f_major_lydian'
 
-DATA_PATH = {"data": "..//data/plasticc_train_lightcurves.csv.gz",
-             "metadata": "..//data/plasticc_train_metadata.csv.gz",
+DATA_PATH = {"path": "data/",
+             "data": "plasticc_train_lightcurves.csv.gz",
+             "metadata": "plasticc_train_metadata.csv.gz",
              }
 
 # inits of interval for transposition
