@@ -142,8 +142,12 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
 
 def multiSonification(data, objectID, instruments=None, key=None,
                       transposing=False, rescaled=False, noctaves=configs.NOCT,
+<<<<<<< HEAD
                       drone="gliss", drum=None,
                       save=False, plot=True):
+=======
+                      drone="gliss", save=False, plot=True):
+>>>>>>> 6771a4e280041380882fab8a8b9e1699d633c906
 
     if key is None:
         key = configs.KEY
@@ -188,11 +192,15 @@ def multiSonification(data, objectID, instruments=None, key=None,
         # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
         volume.append([40] * len(track_drone))
         volume.append([40] * len(track_drone))
+<<<<<<< HEAD
     if drum is not None:
         from .rr_sounds import drum_beat
         track_drum = drum_beat(drum)
         multiDataWIntsruments.append([drum] + track_drum)
         volume.append([40] * len(track_drone))
+=======
+
+>>>>>>> 6771a4e280041380882fab8a8b9e1699d633c906
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
                                volume=volume)
 
@@ -213,4 +221,7 @@ def getIDs(data, dataMETA, objtype):
     else:
         ids = [16]
     return dataMETA[dataMETA["true_target"].isin(ids)].object_id #find the SNe Ibc in the metadata: target 62
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6771a4e280041380882fab8a8b9e1699d633c906

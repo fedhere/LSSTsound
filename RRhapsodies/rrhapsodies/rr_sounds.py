@@ -51,11 +51,19 @@ def drone(PLOT=False):  # "C", "F", "A"):
     return list(zip(quantized_x, dronenote)), list(zip(quantized_x, dronebase))
 
 
+<<<<<<< HEAD
 def drone_glissando(data=None, PLOT=False):
     import sonifyFED.sonify.core as sonify
     if data is None:
         from .rr_utils import readdata
         data, _ = readdata()
+=======
+def drone_glissando(PLOT=False):
+    from .rr_utils import readdata
+    import sonifyFED.sonify.core as sonify
+
+    data, _ = readdata()
+>>>>>>> 6771a4e280041380882fab8a8b9e1699d633c906
     duration = int(data.mjd.max() - data.mjd.min() + 0.5)
     years = duration / 365.25  # duration in years (22 notes)
     time = np.linspace(0, 15, int(22 * years + 0.5))
@@ -77,6 +85,7 @@ def drone_glissando(data=None, PLOT=False):
         plt.show()
     quantized_x = sonify.quantize_x_value(time, steps=0.01)
     return list(zip(quantized_x, y)), list(zip(quantized_x, y_base))
+<<<<<<< HEAD
 
 def drum_beat(drum, data=None):
     import sonifyFED.sonify.core as sonify
@@ -93,3 +102,5 @@ def drum_beat(drum, data=None):
     y = np.ones_like(time)
     data = list(zip(time, y))
     return data
+=======
+>>>>>>> 6771a4e280041380882fab8a8b9e1699d633c906
