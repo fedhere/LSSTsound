@@ -1,8 +1,6 @@
-
-
+import pytest
 import numpy as np
 import numpy.testing as npt
-import pytest
 
 
 def test_make_c_major():
@@ -118,3 +116,30 @@ def test_getIDs():
     assert 43018203 in getIDs(data, metadata, "SNe").values
     assert 43018203 in getIDs(data, metadata, "SNIbc").values
     assert 2677 in getIDs(data, metadata, "EB").values
+
+
+def test_convert_midi_to_wav():
+    import subprocess
+    from sonifyFED import sonify
+    from rrhapsodies.rr_utils import save2wav
+    status = subprocess.call("test -e '{}'".format("midioutput.mid"), shell=True), \
+             subprocess.call("test -e '{}'".format("soundclip.wav"), shell=True)
+    assert not (0, 0) == status
+
+    x = np.linspace(1, 4, 7, endpoint=True)
+    y = np.linspace(1, 2, 7, endpoint=True)
+    data = list(zip(x, y))
+    converted_c_data = sonify.convert_to_key(data, 'c_major', number_of_octaves=1)
+    save2wav(converted_c_data)
+
+    status = subprocess.call("test -e '{}'".format("midioutput.mid"), shell=True), \
+             subprocess.call("test -e '{}'".format("soundclip.wav"), shell=True)
+    npt.assert_equal((0,0), status)
+
+    status = subprocess.call("rm {}".format("midioutput.mid"), shell=True)
+    npt.assert_equal(0, status)
+
+    status = subprocess.call("rm {}".format("soundclip.wav"), shell=True)
+    npt.assert_equal(0, status)
+
+

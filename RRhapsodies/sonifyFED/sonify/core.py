@@ -130,8 +130,8 @@ def get_instrument(instrument_name):
     return program_number - 1, instrument_type
 
 
-#RWC 7/22 - added notebook kwarg to write_to_midifile
-def write_to_midifile(data, track_type='single', volume=90, colab=False):
+# RWC 7/22 - added notebook kwarg to write_to_midifile
+def write_to_midifile(data, track_type='single', volume=90):
     """
     data: list of tuples of x, y coordinates for pitch and timing
           Optional: add a string to the start of the data list to specify instrument!
@@ -151,8 +151,8 @@ def write_to_midifile(data, track_type='single', volume=90, colab=False):
     program = 0
     channel = 0
     duration = 1
-    #volume = 90
-    #print(len(volume[0]))
+    # volume = 90
+    # print(len(volume[0]))
     for i,data_list in enumerate(data): #loop over tracks
         midifile.addTrackName(track, time, 'Track {}'.format(track))
         midifile.addTempo(track, time, 120)
@@ -162,8 +162,8 @@ def write_to_midifile(data, track_type='single', volume=90, colab=False):
             program, instrument_type = get_instrument(data_list.pop(0))
 
         if instrument_type == 'percussion':
-            #print("now")
-            #FBB 7/18/22 removed volume=100 so drums can be at different volume
+            # print("now")
+            # FBB 7/18/22 removed volume=100 so drums can be at different volume
             # volume = 100
             channel = 9
             
@@ -183,8 +183,7 @@ def write_to_midifile(data, track_type='single', volume=90, colab=False):
 
     midifile.writeFile(memfile)
 
-    ###RWC edit 7/22 to save midi file to working dir
-    #if colab:
+    ### RWC edit 7/22 to save midi file to working dir
     print("Saving to midi file")
     with open("midioutput.mid", 'wb') as binfile:
         midifile.writeFile(binfile)
@@ -277,8 +276,7 @@ def play_midi_from_data(input_data, key=None, number_of_octaves=4,
         data = input_data
 
     ### FBB change 07/22 to enable running on colab platform
-    memfile = write_to_midifile(data, track_type, volume=volume,
-                                colab=colab)
+    memfile = write_to_midifile(data, track_type, volume=volume)
     if colab:
         return
     play_memfile_as_midi(memfile, verbose=verbose)

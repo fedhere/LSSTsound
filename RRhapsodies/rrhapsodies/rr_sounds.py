@@ -83,8 +83,7 @@ def drum_beat(drum, data=None):
     import sonifyFED.sonify.core as sonify
     from sonifyFED.sonify.constants import PERCUSSION
     percussions = list(PERCUSSION.keys())
-    assert drum in percussions, 'Current drone options are glissando "gliss" and step "step"'
-
+    assert drum in percussions, 'see the allowed list of percussions in sonify.constants.py'
     if data is None:
         from .rr_utils import readdata
         data, _ = readdata()
