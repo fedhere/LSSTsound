@@ -1,6 +1,7 @@
 # defining the bandpasses for all functions
 import importlib
 import pandas as pd
+from pydub import AudioSegment
 from sonifyFED import sonify as sonify
 from .rr_plotutils import *
 from . import configs as configs
@@ -223,8 +224,6 @@ def getIDs(data, dataMETA, objtype):
     return dataMETA[dataMETA["true_target"].isin(ids)].object_id #find the SNe Ibc in the metadata: target 62
 
 def mergewavs(file1, file2, vol1=0, vol2=0):
-
-    from pydub import AudioSegment
     sound1 = AudioSegment.from_file(file1, format="wav")
     sound2 = AudioSegment.from_file(file2, format="wav")
 
@@ -236,8 +235,8 @@ def mergewavs(file1, file2, vol1=0, vol2=0):
     overlay = sound1.overlay(sound2_new, position=0)
 
     # simple export
-    file_handle = overlay.export("view/{}+{}.wav".format(file1.split('.')[0], file2.split('.')[0]), format="wav")
-    
+    file_handle = overlay.export("view/{}+{}.wav".format(file1.split('/')[1].split('.')[0], file2.split('/')[1].split('.')[0]), format="wav")
+
 def save2wav(data, track_type='single', volume=100):
     memfile = sonify.write_to_midifile(data, track_type=track_type, volume=volume)
     sonify.play_memfile_as_midi(memfile, verbose=False)

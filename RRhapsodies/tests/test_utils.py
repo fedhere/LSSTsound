@@ -120,13 +120,17 @@ def test_getIDs():
 def test_mergewavs():
     from os.path import exists
     from rrhapsodies.rr_utils import mergewavs
-    mergewavs()
-    assert exists("view/{}+{}.wav") 
+
+    mergewavs('view/ID43018203_g.wav', 'view/ID43018203_i.wav')
+
+    assert exists("view/{}+{}.wav". format('ID43018203_g', 'ID43018203_i')) 
 
 def test_convert_midi_to_wav():
     import subprocess
     from sonifyFED import sonify
     from rrhapsodies.rr_utils import save2wav
+    subprocess.call('rm midioutput.mid', shell=True)
+    subprocess.call('rm soundclip.mid', shell=True)
     status = subprocess.call("test -e '{}'".format("midioutput.mid"), shell=True), \
              subprocess.call("test -e '{}'".format("soundclip.wav"), shell=True)
     assert not (0, 0) == status
