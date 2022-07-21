@@ -118,3 +118,9 @@ def test_getIDs():
     assert 43018203 in getIDs(data, metadata, "SNe").values
     assert 43018203 in getIDs(data, metadata, "SNIbc").values
     assert 2677 in getIDs(data, metadata, "EB").values
+
+def test_mergewavs():
+    from os.path import exists
+    from rrhapsodies.rr_utils import mergewavs
+    mergewavs()
+    assert exists("view/{}+{}.wav") 

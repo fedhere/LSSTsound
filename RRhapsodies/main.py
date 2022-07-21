@@ -10,7 +10,7 @@ if __name__ == '__main__':
     data, metadata = rr_utils.readdata()
     thisband = 'r'
     object = 43018203 # 615 #2677
-    if False:
+    if True:
         for thisband in ['u', 'g', 'r', 'i', 'z', 'y']:
             print("object:", object, "band", thisband, configs.INSTRUMENTS[thisband],
                   "transpose:", configs.TRANSPOSITIONS[thisband], "thirds up")
