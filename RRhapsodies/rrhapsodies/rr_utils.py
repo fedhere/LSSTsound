@@ -192,16 +192,15 @@ def multiSonification(data, objectID, instruments=None, key=None,
 
         multiDataWIntsruments.append(['voice oohs'] + track_drone)
         multiDataWIntsruments.append(['voice oohs'] + track_base)
-        # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
-        volume.append([50] * len(track_drone))
-        volume.append([50] * len(track_drone))
+        volume.append([60] * len(track_drone))
+        volume.append([60] * len(track_base))
     if drum is not None:
         from .rr_sounds import drum_beat
         track_drum1, track_drum2 = drum_beat(drum)
         multiDataWIntsruments.append([drum] + track_drum1)
-        volume.append([20] * len(track_drone))
+        volume.append([20] * len(track_drum1))
         multiDataWIntsruments.append([drum] + track_drum2)
-        volume.append([60] * len(track_drone))
+        volume.append([60] * len(track_drum2))
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
                                volume=volume, colab=colab, verbose=verbose)
 
@@ -238,3 +237,7 @@ def mergewavs(file1, file2, vol1=0, vol2=0):
 
     # simple export
     file_handle = overlay.export("view/{}+{}.wav".format(file1.split('.')[0], file2.split('.')[0]), format="wav")
+    
+def save2wav(data, track_type='single', volume=100):
+    memfile = sonify.write_to_midifile(data, track_type=track_type, volume=volume)
+    sonify.play_memfile_as_midi(memfile, verbose=False)

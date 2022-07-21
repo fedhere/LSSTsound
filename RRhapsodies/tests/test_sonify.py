@@ -179,12 +179,12 @@ def test_gettrack(plot=False):
 
         ax[0].plot(objP["mjd"].values, objP["flux"].values, '-')
         ax[0].plot(objP["mjd"].values, objP["flux"].values, '.')
-        plt.ylabel("flux")
+        ax[0].set_ylabel("flux")
 
         ax[1].plot(t, n, '-')
         ax[1].plot(t, n, '.')
         plt.xlabel("time/tempo")
-        plt.ylabel("note")
+        ax[1].set_ylabel("note")
         plt.show()
 
         plt.plot(objP["mjd"].values, t, '.')
@@ -206,9 +206,10 @@ def test_drone():
     track_drone, track_base = drone(PLOT=False)
     multiDataWIntsruments = [['voice oohs'] + track_drone,
                              ['voice oohs'] + track_base]
-    # sonify.play_midi_from_data(list(zip(quantized_x, dronenote)), track_type='single')
+
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
-                               volume=[[40]*len(track_drone), [40]*len(track_drone)])
+                               volume=[[40]*len(track_drone), [40]*len(track_drone)],
+                               verbose=True)
 
 
 def test_drone_glissando():
@@ -218,8 +219,8 @@ def test_drone_glissando():
     multiDataWIntsruments = [['voice oohs'] + track_drone,
                              ['voice oohs'] + track_base]
     sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
-                               volume=[[80] * len(track_drone), [80] * len(track_base)])
-
+                               volume=[[80] * len(track_drone), [80] * len(track_base)],
+                               verbose=True)
 
 def test_drum():
     import sonifyFED.sonify.core as sonify
@@ -228,8 +229,22 @@ def test_drum():
     x = np.linspace(1, 2, 4, endpoint=True)
     y = np.linspace(1, 2, 4, endpoint=True)
     data = list(zip(x, y))
-    #for p in PERCUSSION:
-        #print(p, flush=True)
+    for p in PERCUSSION:
+        print(p, flush=True)
 
-    sonify.play_midi_from_data(['crash cymbal 1'] + data, track_type='single', key='c_major',
+        sonify.play_midi_from_data([p] + data, track_type='single', key='c_major',
                                number_of_octaves=1)
+
+def test_drum_beat():
+    from rrhapsodies.rr_sounds import drum_beat
+    import sonifyFED.sonify.core as sonify
+    drum = 'crash cymbal 1'
+    track_drum1, track_drum2 = drum_beat(drum)
+    multiDataWIntsruments = [[drum] + track_drum1]
+    volume = []
+    volume = [[20] * len(track_drum1)]
+    multiDataWIntsruments.append([drum] + track_drum2)
+    volume.append([60] * len(track_drum2))
+    sonify.play_midi_from_data(multiDataWIntsruments, track_type='multiple',
+                               volume=volume, verbose=True)
+
