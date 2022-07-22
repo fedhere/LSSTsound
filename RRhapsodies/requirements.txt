@@ -2,6 +2,8 @@ attrs==21.4.0
 cycler==0.11.0
 fluidsynth==0.2
 fonttools==4.34.4
+h5py==3.7.0
+imageio==2.19.5
 iniconfig==1.1.1
 kiwisolver==1.4.4
 matplotlib==3.5.2
