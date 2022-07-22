@@ -139,7 +139,8 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
 
     if volume is None:
         volume = np.clip(1.0 / fluxErr * 400, 30, 80).astype(int)
-
+    elif isinstance(volume, int):
+        volume = [volume] * fluxErr.shape[0]
     sonify.play_midi_from_data([instrument] + normed_data, track_type='single',
                                volume=[volume], colab=colab, verbose=verbose)
     if save and not colab:
