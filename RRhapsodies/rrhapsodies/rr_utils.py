@@ -98,7 +98,7 @@ def gettrack(x, y, filter, key, minmaxflux, transposing=False,
 
 
 def singleSonification(data, objectID, filter, instrument=None, key=None,
-                       noctaves=configs.NOCT,
+                       noctaves=configs.NOCT, volume=None,
                        transposing=False, rescaled=False,
                        save=False, plot=False, diagonsticplots=False, colab=False, verbose=True):
     if key is None:
@@ -137,7 +137,8 @@ def singleSonification(data, objectID, filter, instrument=None, key=None,
         ax.plot([0, 1], [0, 1], transform=ax.transAxes)
         plt.show()
 
-    volume = np.clip(1.0 / fluxErr * 400, 30, 80).astype(int)
+    if volume is None:
+        volume = np.clip(1.0 / fluxErr * 400, 30, 80).astype(int)
 
     sonify.play_midi_from_data([instrument] + normed_data, track_type='single',
                                volume=[volume], colab=colab, verbose=verbose)
