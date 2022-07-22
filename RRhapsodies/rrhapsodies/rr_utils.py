@@ -241,3 +241,4 @@ def mergewavs(file1, file2, vol1=0, vol2=0):
 def save2wav(data, track_type='single', volume=100):
     memfile = sonify.write_to_midifile(data, track_type=track_type, volume=volume)
     sonify.play_memfile_as_midi(memfile, verbose=False)
+

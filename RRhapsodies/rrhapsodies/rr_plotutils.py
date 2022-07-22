@@ -72,7 +72,8 @@ def singlePlotObject(data, objectID, filter,
     if show:
         plt.show()
     if save:
-        plt.savefig('ID{}_filter{}}.png'.format(objectID, filter), dpi=300, bbox_inches='tight')
+        plt.savefig('ID{}_filter_{}.png'.format(objectID, filter),
+                    dpi=300, bbox_inches='tight')
 
     return fig, ax
 
@@ -83,13 +84,14 @@ def multiPlotObject(data, objectID, instruments,
     """ plots a multi band object from a Plasticc object:
     arguments:
     objectID: int: the PLAsTiCC object id
-    instruments: list or array: a list of strings indicating musical instrument
+    instruments: dictionary: a dictionary of strings indicating musical instrument
                 available in the SonifyFED library configurations
     save: bool: if True saves the plot as a png file (default True)
     """
     fig, ax = plt.subplots(1, 1, figsize=(10, 3.5))
     objFiltered = data[data["object_id"].isin([objectID])]
-
+    if instruments is None:
+        instruments = {f:'' for f in configs.passband.keys()}
     plotlc(objFiltered, ax, filter=None, instruments=instruments)
 
     title = 'Object: {} '.format(objectID)
@@ -107,3 +109,14 @@ def multiPlotObject(data, objectID, instruments,
         plt.savefig('ID{}_multi.png'.format(objectID), dpi=300, bbox_inches='tight')
 
     return fig, ax
+
+
+def makegiflcvs(filenames, gifname):
+    import imageio.v2 as iio
+    images = []
+    for fn in filenames:
+        images.append(iio.imread(fn))
+
+    with iio.get_writer(gifname, mode='I', fps=1) as writer:
+        for im in images:
+            writer.append_data(im)
