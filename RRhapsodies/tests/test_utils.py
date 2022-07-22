@@ -152,35 +152,3 @@ def test_convert_midi_to_wav():
     npt.assert_equal(0, status)
 
 
-#def mklcvsgif(filenames, gifname=none):
-def test_mklcvsgif():
-    from rrhapsodies.rr_utils import readdata
-    from rrhapsodies.rr_plotutils import singlePlotObject, multiPlotObject, makegiflcvs
-    #import imageio.v2 as iio
-    import subprocess
-    from rrhapsodies.configs import passband, INSTRUMENTS
-    images = []
-    data, _ = readdata()
-    objectID = 43018203
-    gifname = 'test.gif'
-    subprocess.call(gifname, shell=True)
-    filenames = []
-    for f in passband.keys():
-        #singlePlotObject(data, objectID, filter=f,
-        #                 instrument=None, save=True, show=False)
-        filenames.append('ID{}_filter_{}.png'.format(objectID, f))
-
-    #multiPlotObject(data, objectID,
-    #                 instruments=INSTRUMENTS, save=True, show=False)
-    filenames.append('ID{}_multi.png'.format(objectID))
-
-    makegiflcvs(filenames, gifname)
-
-    for f in passband.keys():
-        status = subprocess.call('rm ID{}_filter_{}.png'.format(objectID, f), shell=True)
-        npt.assert_equal(0, status)
-    status = subprocess.call('rm ID{}_multi.png'.format(objectID), shell=True)
-    npt.assert_equal(0, status)
-
-    #subprocess.call(giffile, shell=True)
-    #npt.assert_equal(0, status)
